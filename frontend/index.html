@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C Compiler Error Explainer — Compiler Design Lab</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- CodeMirror (code editor with line numbers + C syntax highlighting) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============== HEADER ============== -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark">CE</div>
+      <div class="brand-text">
+        <h1>C Compiler Error Explainer</h1>
+        <p>Compiler Design Lab — Educational Compiler Analysis Tool</p>
+        <span class="lab-tag">Compiler Design Lab Project</span>
+      </div>
+    </div>
+    <div class="header-status">
+      <span class="status-pill" id="backend-status">
+        <span class="status-dot off" id="backend-dot"></span>
+        <span id="backend-status-text">Checking backend…</span>
+      </span>
+      <span class="status-pill on">
+        <span class="status-dot on"></span>
+        <span>100% Offline · No AI</span>
+      </span>
+    </div>
+  </header>
+
+  <!-- ============== MAIN GRID ============== -->
+  <div class="main-grid">
+
+    <!-- ---------- LEFT: Editor + Pipeline ---------- -->
+    <div class="left-column">
+
+      <div class="panel" style="margin-bottom: 18px;">
+        <div class="panel-header">
+          <h2>C Code Editor <span class="eyebrow">.c</span></h2>
+          <div class="editor-toolbar">
+            <button class="btn btn-ghost" id="copy-btn" title="Copy code">Copy</button>
+          </div>
+        </div>
+
+        <div class="editor-wrap">
+          <textarea id="code-editor"></textarea>
+        </div>
+
+        <div class="editor-actions">
+          <select class="example-select" id="example-select">
+            <option value="">Select Example…</option>
+          </select>
+          <button class="btn btn-ghost" id="clear-btn">Clear</button>
+          <button class="btn btn-primary" id="analyze-btn">▶ Analyze Code</button>
+        </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="gcc-checkbox" />
+          Also compile with real GCC (if installed) for comparison
+        </label>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Compiler Pipeline</h2>
+        </div>
+        <div class="pipeline-strip">
+          <div class="pipeline-nodes" id="pipeline-nodes"><!-- injected by script.js --></div>
+          <div class="pipeline-note" id="pipeline-note"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ---------- RIGHT: Results tabs ---------- -->
+    <div class="panel">
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="tokens">Tokens</button>
+        <button class="tab-btn" data-tab="parsetree">Parse Tree</button>
+        <button class="tab-btn" data-tab="symboltable">Symbol Table</button>
+        <button class="tab-btn" data-tab="intermediate">Intermediate Code</button>
+        <button class="tab-btn" data-tab="optimization">Optimization</button>
+        <button class="tab-btn" data-tab="targetcode">Target Code</button>
+        <button class="tab-btn" data-tab="errors">Errors <span class="count-badge" id="error-count-badge" style="display:none;">0</span></button>
+        <button class="tab-btn" data-tab="aiexplain">📘 Error Explanation</button>
+        <button class="tab-btn" data-tab="about">About</button>
+      </div>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-overview">
+          <div class="empty-state">Write or load some C code, then click "Analyze Code" to begin.</div>
+        </div>
+        <div class="tab-pane" id="tab-tokens">
+          <div class="empty-state">Token table will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-parsetree">
+          <div class="empty-state">Parse tree will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-symboltable">
+          <div class="empty-state">Symbol table will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-intermediate">
+          <div class="empty-state">Three Address Code will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-optimization">
+          <div class="empty-state">Optimization results will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-targetcode">
+          <div class="empty-state">Generated target code will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-errors">
+          <div class="empty-state">Any detected errors will appear here after analysis.</div>
+        </div>
+        <div class="tab-pane" id="tab-aiexplain">
+          <div class="empty-state">Click an error (or analyze code with an error in it) to see its rule-based explanation here.</div>
+        </div>
+        <!-- About tab: edit the student/course placeholders below -->
+        <div class="tab-pane" id="tab-about">
+          <div class="about-card">
+            <h3>C Compiler Error Explainer</h3>
+            <p class="about-sub">Compiler Design Lab Project</p>
+            <p>An educational compiler-analysis system designed to demonstrate the six
+               major phases of compilation and provide rule-based explanations of
+               compiler errors. This project contains no AI, no machine learning,
+               and no external API calls — every explanation is generated from a
+               fixed rule database matched against the compiler's own analysis, and
+               the entire application runs fully offline.</p>
+            <table class="about-table">
+              <tr><td>Student Name</td><td>&lt;your name here&gt;</td></tr>
+              <tr><td>Student ID</td><td>&lt;your ID here&gt;</td></tr>
+              <tr><td>Section</td><td>&lt;your section here&gt;</td></tr>
+              <tr><td>Course</td><td>Compiler Design Lab</td></tr>
+              <tr><td>Instructor</td><td>&lt;instructor name here&gt;</td></tr>
+              <tr><td>Department</td><td>&lt;department here&gt;</td></tr>
+              <tr><td>University</td><td>&lt;university here&gt;</td></tr>
+            </table>
+            <p class="about-note">Edit these placeholders directly in <code>frontend/index.html</code> (search for "About tab") before your submission/demo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">C Compiler Error Explainer · Educational compiler analysis for a subset of C · No AI · Fully offline · Not a replacement for GCC/Clang</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CodeMirror core + C-family (clike) mode -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+
+<script src="script.js"></script>
+</body>
+</html>

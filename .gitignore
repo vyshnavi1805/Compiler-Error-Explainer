@@ -1,0 +1,18 @@
+# Python
+backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Flex/Bison build artifacts
+compiler/*.exe
+compiler/lex.yy.c
+compiler/lex_standalone.yy.c
+compiler/parser.tab.c
+compiler/parser.tab.h
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
