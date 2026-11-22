@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # C Compiler Error Explainer
 
 **Compiler Design Lab — Educational Compiler Analysis Tool**
@@ -372,11 +371,4 @@ C-Compiler-Error-Explainer/
 └── README.md                  You are here
 ```
 
----
 
-*C Compiler Error Explainer — built for a university Compiler Design
-Lab. Contains no AI. Not a replacement for a real C compiler.*
-=======
-# Compiler-Error-Explainer
-An educational compiler visualizer that exposes each phase of the compilation pipeline—from lexical tokens and ASTs to intermediate representation and assembly—making compiler theory tangible.
->>>>>>> 0bd0d3c95a9d04095aac6621b808bacfe255b58b
